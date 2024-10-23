@@ -1,20 +1,31 @@
 package memberships
 
 import (
+	"context"
+
+	"github.com/NXRts/fsatcampus/internal/model/memberships"
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
-	*gin.Engine
+type membershipService interface {
+	SingUp(ctx context.Context, req memberships.SingUpRequest) error
 }
 
-func NewHandler(api *gin.Engine) *Handler {
+type Handler struct {
+	*gin.Engine
+
+	membershipSvc membershipService
+}
+
+func NewHandler(api *gin.Engine, membershipSvc membershipService) *Handler {
 	return &Handler{
-		Engine: api,
+		Engine:        api,
+		membershipSvc: membershipSvc,
 	}
 }
 
 func (h *Handler) RegisterRoutes() {
 	route := h.Group("/memberships")
 	route.GET("/ping", h.Ping)
+	route.POST("/sing-up", h.SingUp)
 }
