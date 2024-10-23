@@ -5,6 +5,8 @@ import (
 
 	config "github.com/NXRts/fsatcampus/internal/configs"
 	"github.com/NXRts/fsatcampus/internal/handlers/memberships"
+	membershipsrepo "github.com/NXRts/fsatcampus/internal/repository/memberships"
+	"github.com/NXRts/fsatcampus/pkg/internalsql"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,6 +31,13 @@ func main() {
 
 	cfg = config.Get()
 	log.Println("Config", cfg)
+
+	db, err := internalsql.Connect(cfg.Database.DataSourceName)
+	if err != nil {
+		log.Fatal("Gagal Inisialisasi Databases", err)
+	}
+
+	_ = membershipsrepo.NewRepository(db)
 
 	membershipsHandler := memberships.NewHandler(r)
 	membershipsHandler.RegisterRoutes()
