@@ -14,7 +14,7 @@ func NewRepository(db *sql.DB) *repository {
 	// if err != nil {
 	// 	log.Println("errof query", err)
 	// }
-	rows, err := db.Query("SELECT id, email FROM `user`")
+	rows, err := db.Query("SELECT id, email FROM `users`")
 	if err != nil {
 		log.Println("error query", err)
 		return nil
