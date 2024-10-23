@@ -2,6 +2,7 @@ package memberships
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/NXRts/fsatcampus/internal/model/memberships"
 )
@@ -13,18 +14,14 @@ func (r *repository) GetUser(ctx context.Context, email, username string) (*memb
 	var response memberships.UserModel
 	err := row.Scan(&response.Id, &response.Email, &response.Password, &response.Username, &response.CreatedAt, &response.UpdateAt, &response.CreatedBy, &response.UpdateBy)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return &response, nil
 }
 
-//	func (r *repository) CreateUser(ctx context.Context, model memberships.UserModel) error {
-//		query := `INSERT INTO users (email, password, username, created_at, created_by, upadted_at, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7)`
-//		_, err := r.db.ExecContext(ctx, query, model.Email, model.Password, model.CreatedAt, model.CreatedBy, model.UpdateAt, model.UpdateBy)
-//		if err != nil {
-//			return err
-//		}
-//	}
 func (r *repository) CreateUser(ctx context.Context, model memberships.UserModel) error {
 	query := `INSERT INTO users (email, password, username, created_at, created_by, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?)`
 	_, err := r.db.ExecContext(ctx, query, model.Email, model.Password, model.Username, model.CreatedAt, model.CreatedBy, model.UpdateAt, model.UpdateBy)
