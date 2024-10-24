@@ -9,14 +9,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (s *service) SingUp(ctx context.Context, req memberships.SingUpRequest) error {
-	user, err := s.membershipsRepo.GetUser(ctx, req.Email, req.Usernamem)
+func (s *service) SingUp(ctx context.Context, req memberships.SignUpRequest) error {
+	user, err := s.membershipsRepo.GetUser(ctx, req.Email, req.Username)
+
 	if err != nil {
 		return err
 	}
 
 	if user != nil {
-		return errors.New("username or email alredy exist")
+		return errors.New("username or email already exist")
 	}
 
 	pass, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -26,13 +27,13 @@ func (s *service) SingUp(ctx context.Context, req memberships.SingUpRequest) err
 
 	now := time.Now()
 	model := memberships.UserModel{
-		Email:     req.Email,
-		Username:  req.Usernamem,
-		Password:  string(pass),
-		CreatedAt: now,
-		UpdateAt:  now,
-		CreatedBy: req.Email,
-		UpdateBy:  req.Email,
+		Email:    req.Email,
+		Username: req.Username,
+		Password: string(pass),
+		CreateAt: now,
+		UpdateAt: now,
+		CreateBy: req.Email,
+		UpdateBy: req.Email,
 	}
 	return s.membershipsRepo.CreateUser(ctx, model)
 

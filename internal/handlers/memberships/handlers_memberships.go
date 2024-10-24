@@ -8,7 +8,7 @@ import (
 )
 
 type membershipService interface {
-	SingUp(ctx context.Context, req memberships.SingUpRequest) error
+	SingUp(ctx context.Context, req memberships.SignUpRequest) error
 }
 
 type Handler struct {
