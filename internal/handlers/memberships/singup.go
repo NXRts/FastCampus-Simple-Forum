@@ -10,7 +10,7 @@ import (
 func (h *Handler) SingUp(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	var request memberships.SingUpRequest
+	var request memberships.SignUpRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -25,5 +25,5 @@ func (h *Handler) SingUp(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, nil)
+	c.Status(http.StatusCreated)
 }

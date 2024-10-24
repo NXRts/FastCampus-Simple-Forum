@@ -5,7 +5,8 @@ import (
 
 	config "github.com/NXRts/fsatcampus/internal/configs"
 	"github.com/NXRts/fsatcampus/internal/handlers/memberships"
-	membershipsrepo "github.com/NXRts/fsatcampus/internal/repository/memberships"
+	membershipsRepo "github.com/NXRts/fsatcampus/internal/repository/memberships"
+	membershipsSvc "github.com/NXRts/fsatcampus/internal/service/memberships"
 	"github.com/NXRts/fsatcampus/pkg/internalsql"
 	"github.com/gin-gonic/gin"
 )
@@ -37,9 +38,11 @@ func main() {
 		log.Fatal("Gagal Inisialisasi Databases", err)
 	}
 
-	_ = membershipsrepo.NewRepository(db)
+	membershipsRepo := membershipsRepo.NewRepository(db)
 
-	membershipsHandler := memberships.NewHandler(r)
+	membershipsService := membershipsSvc.NewService(membershipsRepo)
+
+	membershipsHandler := memberships.NewHandler(r, membershipsService)
 	membershipsHandler.RegisterRoutes()
 
 	r.Run(cfg.Service.Port) // listen and serve on 0.0.0.0:8081 (for windows "localhost:8081")

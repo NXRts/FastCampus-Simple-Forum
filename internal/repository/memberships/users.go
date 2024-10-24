@@ -8,11 +8,11 @@ import (
 )
 
 func (r *repository) GetUser(ctx context.Context, email, username string) (*memberships.UserModel, error) {
-	query := `SELECT id, email, password, username, created_at, created_by, upadted_at, updated_by FROM users WHERE email = $1 OR username = $`
+	query := `SELECT id, email, password, username, create_at, update_at, create_by, update_by FROM users WHERE email = ? OR username = ?`
 	row := r.db.QueryRowContext(ctx, query, email, username)
 
 	var response memberships.UserModel
-	err := row.Scan(&response.Id, &response.Email, &response.Password, &response.Username, &response.CreatedAt, &response.UpdateAt, &response.CreatedBy, &response.UpdateBy)
+	err := row.Scan(&response.Id, &response.Email, &response.Password, &response.Username, &response.CreateAt, &response.UpdateAt, &response.CreateBy, &response.UpdateBy)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -23,8 +23,8 @@ func (r *repository) GetUser(ctx context.Context, email, username string) (*memb
 }
 
 func (r *repository) CreateUser(ctx context.Context, model memberships.UserModel) error {
-	query := `INSERT INTO users (email, password, username, created_at, created_by, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?)`
-	_, err := r.db.ExecContext(ctx, query, model.Email, model.Password, model.Username, model.CreatedAt, model.CreatedBy, model.UpdateAt, model.UpdateBy)
+	query := `INSERT INTO users (email, password, username, create_at, create_by, update_at, update_by) VALUES (?, ?, ?, ?, ?, ?, ?)`
+	_, err := r.db.ExecContext(ctx, query, model.Email, model.Password, model.Username, model.CreateAt, model.CreateBy, model.UpdateAt, model.UpdateBy)
 	if err != nil {
 		return err
 	}
