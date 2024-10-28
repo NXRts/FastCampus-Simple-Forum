@@ -3,6 +3,7 @@ package memberships
 import (
 	"context"
 
+	config "github.com/NXRts/fsatcampus/internal/configs"
 	"github.com/NXRts/fsatcampus/internal/model/memberships"
 )
 
@@ -12,11 +13,13 @@ type membershipsRepository interface {
 }
 
 type service struct {
+	cfg             *config.Config
 	membershipsRepo membershipsRepository
 }
 
-func NewService(membershipsRepo membershipsRepository) *service {
+func NewService(cfg *config.Config, membershipsRepo membershipsRepository) *service {
 	return &service{
+		cfg:             cfg,
 		membershipsRepo: membershipsRepo,
 	}
 }

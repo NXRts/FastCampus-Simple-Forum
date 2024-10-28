@@ -6,8 +6,11 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/rs/zerolog v1.33.0
 	github.com/spf13/viper v1.19.0
 )
+
+require github.com/mattn/go-colorable v0.1.13 // indirect
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
