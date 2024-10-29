@@ -27,6 +27,7 @@ func NewHandler(api *gin.Engine, membershipSvc membershipService) *Handler {
 
 func (h *Handler) RegisterRoutes() {
 	route := h.Group("/memberships")
+	route.Use()
 	route.GET("/ping", h.Ping)
 	route.POST("/sing-up", h.SingUp)
 	route.POST("/login", h.Login)
