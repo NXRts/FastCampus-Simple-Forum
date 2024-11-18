@@ -10,11 +10,11 @@ import (
 
 type postService interface {
 	CreatePost(ctx context.Context, UserId int64, req posts.CreatePostRequest) error
+	CreateComment(ctx context.Context, postID, userID int64, request posts.CreateCommentRequest) error
 }
 
 type Handler struct {
 	*gin.Engine
-
 	postSvc postService
 }
 
@@ -30,4 +30,5 @@ func (h *Handler) RegisterRoutes() {
 	route.Use(middleware.AuthMiddleware())
 
 	route.POST("/create", h.CreatePost)
+	route.POST("/comment/:postID", h.CreateComment)
 }
