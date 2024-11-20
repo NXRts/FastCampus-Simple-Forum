@@ -34,7 +34,6 @@ func main() {
 	}
 
 	cfg = config.Get()
-	// log.Println("Config", cfg)
 
 	db, err := internalsql.Connect(cfg.Database.DataSourceName)
 	if err != nil {

@@ -17,17 +17,9 @@ type (
 		PostTitle    string    `db:"post_title"`
 		PostContent  string    `db:"post_content"`
 		PostHashtags string    `db:"post_hashtags"`
-		CreateAt     time.Time `db:"create_at"`
-		UpdateAt     time.Time `db:"update_at"`
-		CreateBy     string    `db:"create_by"`
-		UpdateBy     string    `db:"update_by"`
+		CreateAt     time.Time `db:"created_at"`
+		UpdateAt     time.Time `db:"updated_at"`
+		CreateBy     string    `db:"created_by"`
+		UpdateBy     string    `db:"updated_by"`
 	}
 )
-
-// post_title VARCHAR(250) NOT NULL,
-// post_content LONGTEXT NOTy NULL,
-// post_hashtags LONGTEXT NOT NULL,
-// created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-// created_by LONGTEXT NOT NULL,
-// updated_by LONGTEXT NOT NULL
