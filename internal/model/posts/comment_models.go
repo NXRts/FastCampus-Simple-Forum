@@ -14,9 +14,9 @@ type (
 		PostID         int64     `db:"post_id"`
 		UserID         int64     `db:"user_id"`
 		CommentContent string    `db:"comment_content"`
-		CreateAt       time.Time `db:"created_at"`
-		UpdateAt       time.Time `db:"updated_at"`
-		CreateBy       string    `db:"created_by"`
-		UpdateBy       string    `db:"updated_by"`
+		CreatedAt      time.Time `db:"created_at"`
+		UpdatedAt      time.Time `db:"updated_at"`
+		CreatedBy      string    `db:"created_by"`
+		UpdatedBy      string    `db:"updated_by"`
 	}
 )

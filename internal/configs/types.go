@@ -1,14 +1,14 @@
-package config
+package configs
 
 type (
 	Config struct {
-		Service  Service  `mapstructure:"Service"`
-		Database Database `mapstructure:"Database"`
+		Service  Service  `mapstructure:"service"`
+		Database Database `mapstructure:"database"`
 	}
 
 	Service struct {
 		Port      string `mapstructure:"port"`
-		SecretJWT string `mapstructure:"secreateJWT"`
+		SecretJWT string `mapstructure:"secretJWT"`
 	}
 
 	Database struct {

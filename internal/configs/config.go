@@ -1,29 +1,27 @@
-package config
+package configs
 
-import (
-	"github.com/spf13/viper"
-)
+import "github.com/spf13/viper"
 
 var config *Config
 
 type option struct {
-	configFolder []string
-	configFile   string
-	configType   string
+	configFolders []string
+	configFile    string
+	configType    string
 }
 
 func Init(opts ...Option) error {
 	opt := &option{
-		configFolder: getDefaultConfigFolder(),
-		configFile:   getDefaultConfigFile(),
-		configType:   getDefaultConfigType(),
+		configFolders: getDefaultConfigFolder(),
+		configFile:    getDefaultConfigFile(),
+		configType:    getDefaultConfigType(),
 	}
 
 	for _, optFunc := range opts {
 		optFunc(opt)
 	}
 
-	for _, configFolder := range opt.configFolder {
+	for _, configFolder := range opt.configFolders {
 		viper.AddConfigPath(configFolder)
 	}
 	viper.SetConfigName(opt.configFile)
@@ -36,7 +34,6 @@ func Init(opts ...Option) error {
 	if err != nil {
 		return err
 	}
-
 	return viper.Unmarshal(&config)
 }
 
@@ -54,9 +51,9 @@ func getDefaultConfigType() string {
 	return "yaml"
 }
 
-func WithConfigFolder(configFolder []string) Option {
+func WithConfigFolder(configFolders []string) Option {
 	return func(opt *option) {
-		opt.configFolder = configFolder
+		opt.configFolders = configFolders
 	}
 }
 

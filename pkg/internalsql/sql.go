@@ -10,7 +10,7 @@ import (
 func Connect(dataSourceName string) (*sql.DB, error) {
 	db, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
-		log.Fatalf("error connecting to databases %+v\n", err)
+		log.Fatalf("error connecting to database %+v\n", err)
 		return nil, err
 	}
 	return db, nil

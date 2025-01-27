@@ -2,24 +2,27 @@ package memberships
 
 import (
 	"context"
+	"time"
 
-	config "github.com/NXRts/fsatcampus/internal/configs"
-	"github.com/NXRts/fsatcampus/internal/model/memberships"
+	"github.com/yeremiaaryo96/fastcampus/internal/configs"
+	"github.com/yeremiaaryo96/fastcampus/internal/model/memberships"
 )
 
-type membershipsRepository interface {
-	GetUser(ctx context.Context, email, username string) (*memberships.UserModel, error)
+type membershipRepository interface {
+	GetUser(ctx context.Context, email, username string, userID int64) (*memberships.UserModel, error)
 	CreateUser(ctx context.Context, model memberships.UserModel) error
+	GetRefreshToken(ctx context.Context, userID int64, now time.Time) (*memberships.RefreshTokenModel, error)
+	InsertRefreshToken(ctx context.Context, model memberships.RefreshTokenModel) error
 }
 
 type service struct {
-	cfg             *config.Config
-	membershipsRepo membershipsRepository
+	cfg            *configs.Config
+	membershipRepo membershipRepository
 }
 
-func NewService(cfg *config.Config, membershipsRepo membershipsRepository) *service {
+func NewService(cfg *configs.Config, membershipRepo membershipRepository) *service {
 	return &service{
-		cfg:             cfg,
-		membershipsRepo: membershipsRepo,
+		cfg:            cfg,
+		membershipRepo: membershipRepo,
 	}
 }

@@ -1,4 +1,4 @@
-Service:
+service:
   port: ":9876"
   secretJWT: "fastcampustest"
 

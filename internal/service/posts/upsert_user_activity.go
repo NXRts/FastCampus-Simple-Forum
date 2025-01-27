@@ -6,11 +6,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/NXRts/fsatcampus/internal/model/posts"
 	"github.com/rs/zerolog/log"
+	"github.com/yeremiaaryo96/fastcampus/internal/model/posts"
 )
 
 func (s *service) UpsertUserActivity(ctx context.Context, postID, userID int64, request posts.UserActivityRequest) error {
+
 	now := time.Now()
 	model := posts.UserActivityModel{
 		PostID:    postID,
@@ -23,21 +24,22 @@ func (s *service) UpsertUserActivity(ctx context.Context, postID, userID int64, 
 	}
 	userActivity, err := s.postRepo.GetUserActivity(ctx, model)
 	if err != nil {
-		log.Error().Err(err).Msg("error get user Activity from Databases")
+		log.Error().Err(err).Msg("error get user activity from database")
 		return err
 	}
+
 	if userActivity == nil {
-		// create userActivity
+		// create user activity
 		if !request.IsLiked {
 			return errors.New("anda belum pernah like sebelumnya")
 		}
 		err = s.postRepo.CreateUserActivity(ctx, model)
 	} else {
-		//Update userActivity
+		// update user activity
 		err = s.postRepo.UpdateUserActivity(ctx, model)
 	}
 	if err != nil {
-		log.Error().Err(err).Msg("error create or update userActifity to database")
+		log.Error().Err(err).Msg("error create or update user activity to database")
 		return err
 	}
 	return nil

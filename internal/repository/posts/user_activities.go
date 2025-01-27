@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/NXRts/fsatcampus/internal/model/posts"
+	"github.com/yeremiaaryo96/fastcampus/internal/model/posts"
 )
 
 func (r *repository) GetUserActivity(ctx context.Context, model posts.UserActivityModel) (*posts.UserActivityModel, error) {
@@ -39,4 +39,17 @@ func (r *repository) UpdateUserActivity(ctx context.Context, model posts.UserAct
 		return err
 	}
 	return nil
+}
+
+func (r *repository) CountLikeByPostID(ctx context.Context, postID int64) (int, error) {
+	query := `SELECT COUNT(id) FROM user_activities WHERE post_id = ? AND is_liked = true`
+
+	var response int
+	row := r.db.QueryRowContext(ctx, query, postID)
+
+	err := row.Scan(&response)
+	if err != nil {
+		return response, err
+	}
+	return response, nil
 }

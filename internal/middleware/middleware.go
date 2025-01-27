@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"strings"
 
-	config "github.com/NXRts/fsatcampus/internal/configs"
-	"github.com/NXRts/fsatcampus/pkg/jwt"
 	"github.com/gin-gonic/gin"
+	"github.com/yeremiaaryo96/fastcampus/internal/configs"
+	"github.com/yeremiaaryo96/fastcampus/pkg/jwt"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-	secretKey := config.Get().Service.SecretJWT
+	secretKey := configs.Get().Service.SecretJWT
 	return func(c *gin.Context) {
 		header := c.Request.Header.Get("Authorization")
 
@@ -21,12 +21,34 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		userId, username, err := jwt.ValidateToken(header, secretKey)
+		userID, username, err := jwt.ValidateToken(header, secretKey)
 		if err != nil {
 			c.AbortWithError(http.StatusUnauthorized, err)
 			return
 		}
-		c.Set("userID", userId)
+		c.Set("userID", userID)
+		c.Set("username", username)
+		c.Next()
+	}
+}
+
+func AuthRefreshMiddleware() gin.HandlerFunc {
+	secretKey := configs.Get().Service.SecretJWT
+	return func(c *gin.Context) {
+		header := c.Request.Header.Get("Authorization")
+
+		header = strings.TrimSpace(header)
+		if header == "" {
+			c.AbortWithError(http.StatusUnauthorized, errors.New("missing token"))
+			return
+		}
+
+		userID, username, err := jwt.ValidateTokenWithoutExpiry(header, secretKey)
+		if err != nil {
+			c.AbortWithError(http.StatusUnauthorized, err)
+			return
+		}
+		c.Set("userID", userID)
 		c.Set("username", username)
 		c.Next()
 	}

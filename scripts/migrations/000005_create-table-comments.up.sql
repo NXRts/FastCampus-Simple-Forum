@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS comments (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by LONGTEXT NOT NULL,
     updated_by LONGTEXT NOT NULL,
-    CONSTRAINT fk_post_id_comments FOREIGN KEY (post_id) REFERENCES posts (id),
-    CONSTRAINT fk_user_id_comments FOREIGN KEY (user_id) REFERENCES users (id)
+    CONSTRAINT fk_post_id_comments FOREIGN KEY (post_id) REFERENCES posts(id),
+    CONSTRAINT fk_user_id_comments FOREIGN KEY (user_id) REFERENCES users(id)
 )

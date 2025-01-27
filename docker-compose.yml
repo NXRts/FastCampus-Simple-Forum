@@ -9,4 +9,4 @@ services:
       - MYSQL_ROOT_PASSWORD=superSecretPassword
       - MYSQL_DATABASE=fastcampus
     volumes:
-      - /e/Database/Docker/Fastcampus_mysql/db:/var/lib/mysql
+      - /Users/yeremiaaryo/go/FastCampus/fastcampus_mysql/db:/var/lib/mysql

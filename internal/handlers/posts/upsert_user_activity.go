@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/NXRts/fsatcampus/internal/model/posts"
 	"github.com/gin-gonic/gin"
+	"github.com/yeremiaaryo96/fastcampus/internal/model/posts"
 )
 
 func (h *Handler) UpsertUserActivity(c *gin.Context) {
@@ -24,7 +24,7 @@ func (h *Handler) UpsertUserActivity(c *gin.Context) {
 	postID, err := strconv.ParseInt(postIDStr, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": errors.New("postID tidak valid").Error(),
+			"error": errors.New("postID pada param tidak valid").Error(),
 		})
 		return
 	}

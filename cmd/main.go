@@ -3,57 +3,55 @@ package main
 import (
 	"log"
 
-	config "github.com/NXRts/fsatcampus/internal/configs"
-	"github.com/NXRts/fsatcampus/internal/handlers/memberships"
-	"github.com/NXRts/fsatcampus/internal/handlers/posts"
-	membershipsRepo "github.com/NXRts/fsatcampus/internal/repository/memberships"
-	postRepo "github.com/NXRts/fsatcampus/internal/repository/posts"
-	membershipsSvc "github.com/NXRts/fsatcampus/internal/service/memberships"
-	postSvc "github.com/NXRts/fsatcampus/internal/service/posts"
-	"github.com/NXRts/fsatcampus/pkg/internalsql"
 	"github.com/gin-gonic/gin"
+	"github.com/yeremiaaryo96/fastcampus/internal/configs"
+	"github.com/yeremiaaryo96/fastcampus/internal/handlers/memberships"
+	"github.com/yeremiaaryo96/fastcampus/internal/handlers/posts"
+	membershipRepo "github.com/yeremiaaryo96/fastcampus/internal/repository/memberships"
+	postRepo "github.com/yeremiaaryo96/fastcampus/internal/repository/posts"
+	membershipSvc "github.com/yeremiaaryo96/fastcampus/internal/service/memberships"
+	postSvc "github.com/yeremiaaryo96/fastcampus/internal/service/posts"
+	"github.com/yeremiaaryo96/fastcampus/pkg/internalsql"
 )
 
 func main() {
 	r := gin.Default()
 
 	var (
-		cfg *config.Config
+		cfg *configs.Config
 	)
 
-	err := config.Init(
-		config.WithConfigFolder(
+	err := configs.Init(
+		configs.WithConfigFolder(
 			[]string{"./internal/configs/"},
 		),
-		config.WithConfigFile("config"),
-		config.WithConfigType("yaml"),
+		configs.WithConfigFile("config"),
+		configs.WithConfigType("yaml"),
 	)
-
 	if err != nil {
-		log.Fatal("Gagal Inisialisasi Config", err)
+		log.Fatal("Gagal inisiasi config", err)
 	}
-
-	cfg = config.Get()
+	cfg = configs.Get()
 
 	db, err := internalsql.Connect(cfg.Database.DataSourceName)
 	if err != nil {
-		log.Fatal("Gagal Inisialisasi Databases", err)
+		log.Fatal("Gagal inisiasi database", err)
 	}
 
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	membershipsRepo := membershipsRepo.NewRepository(db)
+	membershipRepo := membershipRepo.NewRepository(db)
 	postRepo := postRepo.NewRepository(db)
 
-	membershipsService := membershipsSvc.NewService(cfg, membershipsRepo)
+	membershipService := membershipSvc.NewService(cfg, membershipRepo)
 	postService := postSvc.NewService(cfg, postRepo)
 
-	membershipsHandler := memberships.NewHandler(r, membershipsService)
-	membershipsHandler.RegisterRoutes()
+	membershipHandler := memberships.NewHandler(r, membershipService)
+	membershipHandler.RegisterRoute()
 
 	postHandler := posts.NewHandler(r, postService)
-	postHandler.RegisterRoutes()
+	postHandler.RegisterRoute()
 
-	r.Run(cfg.Service.Port) // listen and serve on 0.0.0.0:8081 (for windows "localhost:8081")
+	r.Run(cfg.Service.Port)
 }
